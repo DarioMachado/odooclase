@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Define the parent menu -->
+        <menuitem id="menu_exorcismo_root" name="Exorcismo" sequence="10"/>
+
+
+        <record id="action_exorcismo" model="ir.actions.act_window">
+            <field name="name">Exorcismo Action</field>
+            <field name="res_model">exorcismo.puntuacion</field>
+            <field name="view_mode">form</field>
+
+        </record>
+
+        <menuitem id="menu_exorcismo_sub" name="Exorcismo Submenu" parent="menu_exorcismo_root" action="action_exorcismo" sequence="5"/>
+
+
+    </data>
+</odoo>

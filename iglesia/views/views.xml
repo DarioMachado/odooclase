@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="iglesia.list">
+      <field name="name">iglesia list</field>
+      <field name="model">iglesia.iglesia</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="iglesia.action_window">
+      <field name="name">iglesia window</field>
+      <field name="res_model">iglesia.iglesia</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="iglesia.action_server">
+      <field name="name">iglesia server</field>
+      <field name="model_id" ref="model_iglesia_iglesia"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="iglesia" id="iglesia.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="iglesia.menu_1" parent="iglesia.menu_root"/>
+    <menuitem name="Menu 2" id="iglesia.menu_2" parent="iglesia.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="iglesia.menu_1_list" parent="iglesia.menu_1"
+              action="iglesia.action_window"/>
+    <menuitem name="Server to list" id="iglesia" parent="iglesia.menu_2"
+              action="iglesia.action_server"/>
+-->
+  </data>
+</odoo>
