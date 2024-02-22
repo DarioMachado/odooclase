@@ -26,7 +26,7 @@ class Angel {
     }
 
     disparar(balas: Bala[]) {
-        balas.push(new Bala(this.x, this.y));
+        balas.push(new Bala(this.x+20, this.y));
     }
 }
 
@@ -87,6 +87,11 @@ if(canvas){
             jesus.x = clamp(mouseX, 0, canvas.width - 40); 
             jesus.y = clamp(mouseY, 0, canvas.height - 40);
         });
+
+        const balas: Bala[] = [];
+        canvas.addEventListener('click', () => {
+            jesus.disparar(balas);
+        });
     
         function dibujar(){
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -94,6 +99,11 @@ if(canvas){
             ctx.fillRect(0, 0, canvas.width, canvas.height);
     
             jesus.draw(ctx);
+
+            balas.forEach(bullet => {
+                bullet.move();
+                bullet.draw(ctx);
+            });
     
     
             requestAnimationFrame(dibujar);

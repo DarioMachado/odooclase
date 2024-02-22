@@ -24,7 +24,7 @@ var Angel = /** @class */ (function () {
         }
     };
     Angel.prototype.disparar = function (balas) {
-        balas.push(new Bala(this.x, this.y));
+        balas.push(new Bala(this.x + 20, this.y));
     };
     return Angel;
 }());
@@ -68,11 +68,19 @@ if (canvas) {
             jesus.x = clamp(mouseX, 0, canvas.width - 40);
             jesus.y = clamp(mouseY, 0, canvas.height - 40);
         });
+        var balas_1 = [];
+        canvas.addEventListener('click', function () {
+            jesus.disparar(balas_1);
+        });
         function dibujar() {
             ctx_1.clearRect(0, 0, canvas.width, canvas.height);
             ctx_1.fillStyle = 'black';
             ctx_1.fillRect(0, 0, canvas.width, canvas.height);
             jesus.draw(ctx_1);
+            balas_1.forEach(function (bullet) {
+                bullet.move();
+                bullet.draw(ctx_1);
+            });
             requestAnimationFrame(dibujar);
         }
         dibujar();
