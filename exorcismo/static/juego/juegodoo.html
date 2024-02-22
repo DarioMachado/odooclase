@@ -17,14 +17,14 @@
     var name = 'YourName'; // Change to the actual name value
     var score = 100; // Change to the actual score value
 
-    fetch('/exorcismo/insertar', {
+    fetch('http://localhost:8069/exorcismo/insertar', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             name: name,
-            date: 2024-01-01,
+            date: '2024-01-01',
             score: score
         })
     })
@@ -40,6 +40,7 @@
     .catch(error => {
         console.error('Error:', error);
         alert('An error occurred while inserting the score.');
+    });
     });
     </script>
 </body>

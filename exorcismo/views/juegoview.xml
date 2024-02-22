@@ -1,21 +1,20 @@
 <odoo>
+
     <data>
-      <record id="view_game_form" model="ir.ui.view">
-        <field name="name">game.form</field>
-        <field name="model">exorcismo.puntuacion</field>
-        <field name="arch" type="xml">
-            <form string="Game">
-                <group>
-                    <field name="name" placeholder="Player's Name"/>
-                    <!--<button string="Start Game" type="object" class="btn-primary"/> -->
-                </group>
-                <iframe width="100%" height="500" frameborder="0" src="http://localhost:8000/juegodoo.html"/>
-            </form>
-        </field>
-    </record>
-
-
+        <!-- Define the list view for exorcismo.puntuacion -->
+        <record id="view_game_list" model="ir.ui.view">
+            <field name="name">game.list</field>
+            <field name="model">exorcismo.puntuacion</field>
+            <field name="arch" type="xml">
+                <tree string="Game List">
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="score"/>
+                </tree>
+            </field>
+        </record>
     </data>
+
 
 
 
