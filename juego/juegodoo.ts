@@ -30,17 +30,43 @@ class Angel {
     }
 }
 
-class Demonio{
-    vida: Number = 1;
-    rutaImg: String;
-    x: Number;
-    y: Number;
-    constructor(rutaImg: String, x: Number, y: Number){
-        this.rutaImg = rutaImg;
+class Demonio {
+    x: number;
+    y: number;
+    speed: number;
+    img: HTMLImageElement; // Image property
+    direction: number; // Direction of movement (-1 for left, 1 for right)
+
+    constructor(x: number, y: number, speed: number, imgSrc: string) {
         this.x = x;
         this.y = y;
+        this.speed = speed;
+        this.img = new Image();
+        this.img.src = imgSrc; // Load enemy image
+        this.direction = -1; // Start by moving left
+    }
+
+    update() {
+        // Move downwards by 5 units
+        this.y += 0.1;
+
+        // Change direction when reaching the edge of the canvas
+        if (this.x <= 0 || this.x >= canvas.width - 40) {
+            this.direction *= -1; // Change direction
+        }
+
+        // Move horizontally based on direction and speed
+        this.x += this.speed * this.direction;
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+        this.update();
+        const width = 40;
+        const height = 40;
+        ctx.drawImage(this.img, this.x, this.y, width, height);
     }
 }
+
 
 class Bala {
     x: number;
@@ -63,6 +89,8 @@ class Bala {
 }
 
 var jesus: Angel = new Angel("juego/jesus.png", 5, 5);
+
+const demonios: Demonio[] = [];
 
 const canvas: HTMLCanvasElement | null = document.getElementById("juegodoo") as HTMLCanvasElement;
 
@@ -107,6 +135,11 @@ if(canvas){
                 bullet.move();
                 bullet.draw(ctx);
             });
+
+            demonios.forEach(demonio => {
+                demonio.update(); // Update demon position
+                demonio.draw(ctx); // Draw demon
+            });
             drawHealthCrosses(ctx, jesus.vida);
             drawScore(ctx);
             
@@ -123,7 +156,7 @@ if(canvas){
 }else{
     console.log("error con canvas");
 }
-
+setInterval(addDemonio, 2000);
 
 function clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
@@ -146,16 +179,34 @@ var score: number = 0;
 
 function drawScore(ctx: CanvasRenderingContext2D) {
     const margin = 10; // Margin from the top-right corner
-    const fontSize = 20; // Font size for the score
-    const fontFamily = "Arial"; // Font family for the score
+    const fontSize = 15; // Font size for the score
+    const fontFamily = "Pixelade"; // Font family for the score
 
     // Calculate the X position based on the canvas width and margin
     const scoreX = canvas.width - margin;
-    // Calculate the Y position based on the margin
     const scoreY = margin + fontSize;
 
     ctx.font = `${fontSize}px ${fontFamily}`;
     ctx.fillStyle = "white";
     ctx.textAlign = "right"; // Align text to the right
-    ctx.fillText(`Score: ${score}`, scoreX, scoreY);
+    ctx.fillText(`Puntos: ${score}`, scoreX, scoreY);
+}
+
+function addDemonio(){
+    const lista = [
+        {nombre: "El diablo", velocidad: 0.5, ruta: "juego/eldiablo.png"},
+        {nombre: "YHVH", velocidad: 2.5, ruta: "juego/yhvh.png"}
+        
+    ];
+
+    const randomIndex = Math.floor(Math.random() * lista.length);
+    const { velocidad, ruta } = lista[randomIndex];
+
+  
+    const x = (Math.random() * anchuraCanvas) - 20;
+
+
+
+    const demon = new Demonio(x, 40, velocidad, ruta);
+    demonios.push(demon);
 }

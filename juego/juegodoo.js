@@ -29,12 +29,30 @@ var Angel = /** @class */ (function () {
     return Angel;
 }());
 var Demonio = /** @class */ (function () {
-    function Demonio(rutaImg, x, y) {
-        this.vida = 1;
-        this.rutaImg = rutaImg;
+    function Demonio(x, y, speed, imgSrc) {
         this.x = x;
         this.y = y;
+        this.speed = speed;
+        this.img = new Image();
+        this.img.src = imgSrc; // Load enemy image
+        this.direction = -1; // Start by moving left
     }
+    Demonio.prototype.update = function () {
+        // Move downwards by 5 units
+        this.y += 0.1;
+        // Change direction when reaching the edge of the canvas
+        if (this.x <= 0 || this.x >= canvas.width - 40) {
+            this.direction *= -1; // Change direction
+        }
+        // Move horizontally based on direction and speed
+        this.x += this.speed * this.direction;
+    };
+    Demonio.prototype.draw = function (ctx) {
+        this.update();
+        var width = 40;
+        var height = 40;
+        ctx.drawImage(this.img, this.x, this.y, width, height);
+    };
     return Demonio;
 }());
 var Bala = /** @class */ (function () {
@@ -53,6 +71,7 @@ var Bala = /** @class */ (function () {
     return Bala;
 }());
 var jesus = new Angel("juego/jesus.png", 5, 5);
+var demonios = [];
 var canvas = document.getElementById("juegodoo");
 var anchuraCanvas = canvas.width;
 var alturaCanvas = canvas.height;
@@ -83,6 +102,10 @@ if (canvas) {
                 bullet.move();
                 bullet.draw(ctx_1);
             });
+            demonios.forEach(function (demonio) {
+                demonio.update(); // Update demon position
+                demonio.draw(ctx_1); // Draw demon
+            });
             drawHealthCrosses(ctx_1, jesus.vida);
             drawScore(ctx_1);
             requestAnimationFrame(dibujar);
@@ -96,6 +119,7 @@ if (canvas) {
 else {
     console.log("error con canvas");
 }
+setInterval(addDemonio, 2000);
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
@@ -112,14 +136,24 @@ function drawHealthCrosses(ctx, health) {
 var score = 0;
 function drawScore(ctx) {
     var margin = 10; // Margin from the top-right corner
-    var fontSize = 20; // Font size for the score
-    var fontFamily = "Arial"; // Font family for the score
+    var fontSize = 15; // Font size for the score
+    var fontFamily = "Pixelade"; // Font family for the score
     // Calculate the X position based on the canvas width and margin
     var scoreX = canvas.width - margin;
-    // Calculate the Y position based on the margin
     var scoreY = margin + fontSize;
     ctx.font = "".concat(fontSize, "px ").concat(fontFamily);
     ctx.fillStyle = "white";
     ctx.textAlign = "right"; // Align text to the right
-    ctx.fillText("Score: ".concat(score), scoreX, scoreY);
+    ctx.fillText("Puntos: ".concat(score), scoreX, scoreY);
+}
+function addDemonio() {
+    var lista = [
+        { nombre: "El diablo", velocidad: 0.5, ruta: "juego/eldiablo.png" },
+        { nombre: "YHVH", velocidad: 2.5, ruta: "juego/yhvh.png" }
+    ];
+    var randomIndex = Math.floor(Math.random() * lista.length);
+    var _a = lista[randomIndex], velocidad = _a.velocidad, ruta = _a.ruta;
+    var x = (Math.random() * anchuraCanvas) - 20;
+    var demon = new Demonio(x, 40, velocidad, ruta);
+    demonios.push(demon);
 }
