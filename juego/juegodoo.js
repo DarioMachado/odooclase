@@ -53,7 +53,7 @@ var Demonio = /** @class */ (function () {
         var width = 40;
         var height = 40;
         ctx.drawImage(this.img, this.x, this.y, width, height);
-        this.damageJesus(jesus);
+        this.damageJesus(jesus, ctx);
     };
     Demonio.prototype.collidesWithBullet = function (bullet) {
         return (this.x < bullet.x + 2 &&
@@ -67,7 +67,7 @@ var Demonio = /** @class */ (function () {
             this.y < jesus.y + 40 &&
             this.y + 40 > jesus.y);
     };
-    Demonio.prototype.damageJesus = function (jesus) {
+    Demonio.prototype.damageJesus = function (jesus, ctx) {
         if (this.collidesWithJesus(jesus)) {
             var indexToRemove = demonios.indexOf(this);
             if (indexToRemove !== -1) {
@@ -102,6 +102,7 @@ var cruz = new Image();
 cruz.src = "juego/lacruz.png";
 if (canvas) {
     var ctx_1 = canvas.getContext("2d");
+    var animar;
     if (ctx_1) {
         var canvasRect_1 = canvas.getBoundingClientRect(); // Get canvas position relative to the viewport
         // Event listener for mouse movement
@@ -145,7 +146,19 @@ if (canvas) {
             });
             drawHealthCrosses(ctx_1, jesus.vida);
             drawScore(ctx_1);
-            requestAnimationFrame(dibujar);
+            if (jesus.vida < 3) {
+                ctx_1.fillStyle = "white";
+                ctx_1.font = "20px Arial";
+                ctx_1.textAlign = "center";
+                ctx_1.fillText("JESÚS HA RESUCITADO", canvas.width / 2, canvas.height / 2 - 20);
+                if (jesus.vida < 2) {
+                    ctx_1.fillText("JESÚS ES REY", canvas.width / 2, canvas.height / 2 + 20);
+                    if (jesus.vida < 1) {
+                        return acabar(ctx_1);
+                    }
+                }
+            }
+            animar = requestAnimationFrame(dibujar);
         }
         dibujar();
     }
@@ -156,7 +169,7 @@ if (canvas) {
 else {
     console.log("error con canvas");
 }
-setInterval(addDemonio, 500);
+var intervalo = setInterval(addDemonio, 500);
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
@@ -195,4 +208,34 @@ function addDemonio() {
     var x = Math.max(0, Math.min(canvas.width - 50, Math.random() * canvas.width));
     var demon = new Demonio(x, 40, velocidadX, velocidadY, ruta);
     demonios.push(demon);
+}
+function acabar(ctx) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    clearInterval(intervalo);
+    ctx = null;
+    var message = document.createElement('div');
+    message.textContent = 'JESÚS VOLVERÁ. INSERTA TU NOMBRE';
+    message.style.position = 'absolute';
+    message.style.top = '10px';
+    message.style.left = '10px';
+    document.body.appendChild(message);
+    var nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.placeholder = 'Enter your name';
+    nameInput.style.position = 'absolute';
+    nameInput.style.top = '50px';
+    nameInput.style.left = '10px';
+    document.body.appendChild(nameInput);
+    var submitButton = document.createElement('button');
+    submitButton.textContent = 'Submit';
+    submitButton.style.position = 'absolute';
+    submitButton.style.top = '100px';
+    submitButton.style.left = '10px';
+    document.body.appendChild(submitButton);
+    submitButton.addEventListener('click', function () {
+        var playerName = nameInput.value;
+        console.log('Player name:', playerName);
+    });
 }

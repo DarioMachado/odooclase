@@ -31,7 +31,9 @@ class Angel {
 
     muerte(){
         this.vida-=1;
+
     }
+   
 }
 
 class Demonio {
@@ -68,7 +70,7 @@ class Demonio {
         const width = 40;
         const height = 40;
         ctx.drawImage(this.img, this.x, this.y, width, height);
-        this.damageJesus(jesus);
+        this.damageJesus(jesus, ctx);
     }
 
     collidesWithBullet(bullet: Bala): boolean {
@@ -90,7 +92,7 @@ class Demonio {
     }
 
 
-    damageJesus(jesus: Angel) {
+    damageJesus(jesus: Angel, ctx: CanvasRenderingContext2D) {
         
         if (this.collidesWithJesus(jesus)) {
 
@@ -141,7 +143,7 @@ cruz.src = "juego/lacruz.png";
 
 if(canvas){
     const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d") as CanvasRenderingContext2D;
-
+    var animar;
     if(ctx){
         const canvasRect = canvas.getBoundingClientRect(); // Get canvas position relative to the viewport
 
@@ -200,11 +202,24 @@ if(canvas){
             });
             drawHealthCrosses(ctx, jesus.vida);
             drawScore(ctx);
+            
+            if(jesus.vida < 3){
+                ctx.fillStyle = "white";
+                ctx.font = "20px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText("JESÚS HA RESUCITADO", canvas.width / 2, canvas.height / 2 - 20);
+                if(jesus.vida < 2){
+                    ctx.fillText("JESÚS ES REY", canvas.width / 2, canvas.height / 2 + 20);
+                    if(jesus.vida < 1){
+                       return acabar(ctx);
+                    }
+                }
 
+            }
 
            
             
-            requestAnimationFrame(dibujar);
+         animar = requestAnimationFrame(dibujar);
         }
     
         dibujar();
@@ -217,7 +232,7 @@ if(canvas){
 }else{
     console.log("error con canvas");
 }
-setInterval(addDemonio, 500);
+var intervalo = setInterval(addDemonio, 500);
 
 function clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
@@ -272,4 +287,76 @@ function addDemonio(){
 
     const demon = new Demonio(x, 40, velocidadX, velocidadY, ruta);
     demonios.push(demon);
+}
+
+
+function acabar(ctx: CanvasRenderingContext2D){
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    clearInterval(intervalo);
+    ctx = null;
+
+
+    const message = document.createElement('div');
+    message.textContent = 'JESÚS VOLVERÁ. INSERTA TU NOMBRE';
+    message.style.position = 'absolute';
+    message.style.top = '10px';
+    message.style.left = '10px';
+    document.body.appendChild(message);
+
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.placeholder = 'Tu nombre';
+    nameInput.style.position = 'absolute';
+    nameInput.style.top = '50px';
+    nameInput.style.left = '10px';
+    document.body.appendChild(nameInput); 
+    
+  
+    const submitButton = document.createElement('button');
+    submitButton.textContent = 'Submit';
+    submitButton.style.position = 'absolute';
+    submitButton.style.top = '100px';
+    submitButton.style.left = '10px';
+    document.body.appendChild(submitButton); 
+    
+   
+    submitButton.addEventListener('click', function() {
+        var name = nameInput.value; 
+        var puntos = score; 
+        const fechaDeHoy = new Date();
+
+        
+        const fechaFormateada = fechaDeHoy.toISOString().slice(0, 10);
+
+        console.log('Fecha de hoy:', fechaFormateada);
+    
+        fetch('http://localhost:8069/exorcismo/insertar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                date: fechaFormateada,
+                score: puntos
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // You can handle the response here
+            if (data.success) {
+                alert('Score inserted successfully!');
+            } else {
+                alert('Failed to insert score.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while inserting the score.');
+        });
+        });
+
 }
