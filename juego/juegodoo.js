@@ -56,6 +56,8 @@ var jesus = new Angel("juego/jesus.png", 5, 5);
 var canvas = document.getElementById("juegodoo");
 var anchuraCanvas = canvas.width;
 var alturaCanvas = canvas.height;
+var cruz = new Image();
+cruz.src = "juego/lacruz.png";
 if (canvas) {
     var ctx_1 = canvas.getContext("2d");
     if (ctx_1) {
@@ -81,6 +83,8 @@ if (canvas) {
                 bullet.move();
                 bullet.draw(ctx_1);
             });
+            drawHealthCrosses(ctx_1, jesus.vida);
+            drawScore(ctx_1);
             requestAnimationFrame(dibujar);
         }
         dibujar();
@@ -94,4 +98,28 @@ else {
 }
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
+}
+function drawHealthCrosses(ctx, health) {
+    var margin = 10; // Margin from the top-left corner
+    var crossSize = 20; // Size of each cross image
+    var spacing = 5; // Spacing between crosses
+    for (var i = 0; i < health; i++) {
+        var crossX = margin + (crossSize + spacing) * i; // Adjusted position for left side
+        var crossY = margin;
+        ctx.drawImage(cruz, crossX, crossY, crossSize, crossSize);
+    }
+}
+var score = 0;
+function drawScore(ctx) {
+    var margin = 10; // Margin from the top-right corner
+    var fontSize = 20; // Font size for the score
+    var fontFamily = "Arial"; // Font family for the score
+    // Calculate the X position based on the canvas width and margin
+    var scoreX = canvas.width - margin;
+    // Calculate the Y position based on the margin
+    var scoreY = margin + fontSize;
+    ctx.font = "".concat(fontSize, "px ").concat(fontFamily);
+    ctx.fillStyle = "white";
+    ctx.textAlign = "right"; // Align text to the right
+    ctx.fillText("Score: ".concat(score), scoreX, scoreY);
 }

@@ -1,5 +1,5 @@
 class Angel {
-    vida: Number = 3;
+    vida: number = 3;
     velocidad: Number = 3;
     img: HTMLImageElement;
     x: number;
@@ -69,6 +69,9 @@ const canvas: HTMLCanvasElement | null = document.getElementById("juegodoo") as 
 const anchuraCanvas = canvas.width;
 const alturaCanvas = canvas.height;
 
+const cruz = new Image();
+cruz.src = "juego/lacruz.png";
+
 
 if(canvas){
     const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d") as CanvasRenderingContext2D;
@@ -104,8 +107,9 @@ if(canvas){
                 bullet.move();
                 bullet.draw(ctx);
             });
-    
-    
+            drawHealthCrosses(ctx, jesus.vida);
+            drawScore(ctx);
+            
             requestAnimationFrame(dibujar);
         }
     
@@ -125,3 +129,33 @@ function clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
 }
 
+function drawHealthCrosses(ctx: CanvasRenderingContext2D, health: number) {
+    const margin = 10; // Margin from the top-left corner
+    const crossSize = 20; // Size of each cross image
+    const spacing = 5; // Spacing between crosses
+
+    for (let i = 0; i < health; i++) {
+        const crossX = margin + (crossSize + spacing) * i; // Adjusted position for left side
+        const crossY = margin;
+
+        ctx.drawImage(cruz, crossX, crossY, crossSize, crossSize);
+    }
+}
+
+var score: number = 0;
+
+function drawScore(ctx: CanvasRenderingContext2D) {
+    const margin = 10; // Margin from the top-right corner
+    const fontSize = 20; // Font size for the score
+    const fontFamily = "Arial"; // Font family for the score
+
+    // Calculate the X position based on the canvas width and margin
+    const scoreX = canvas.width - margin;
+    // Calculate the Y position based on the margin
+    const scoreY = margin + fontSize;
+
+    ctx.font = `${fontSize}px ${fontFamily}`;
+    ctx.fillStyle = "white";
+    ctx.textAlign = "right"; // Align text to the right
+    ctx.fillText(`Score: ${score}`, scoreX, scoreY);
+}
