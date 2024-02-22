@@ -1,14 +1,32 @@
 class Angel {
     vida: Number = 3;
     velocidad: Number = 3;
-    rutaImg: String;
-    x: Number;
-    y: Number;
+    img: HTMLImageElement;
+    x: number;
+    y: number;
+    imagenCargada: boolean = false;
     
-    constructor(rutaImg: String, x: Number, y: Number){
-        this.rutaImg = rutaImg;
+    constructor(imgSrc: string, x: number, y: number){
+        this.img = new Image();
+        this.img.src = imgSrc;
+        this.img.onload = () => { // Set up onload event handler
+            this.imagenCargada = true; // Set isImageLoaded to true when the image is loaded
+        };
         this.x = x;
         this.y = y;
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+        if (this.imagenCargada) { // Check if the image has finished loading
+            ctx.drawImage(this.img, this.x, this.y);
+        } else {
+            requestAnimationFrame(() => { // Try again in the next frame
+                this.draw(ctx);
+            });}
+    }
+
+    disparar(balas: Bala[]) {
+        balas.push(new Bala(this.x, this.y));
     }
 }
 
@@ -24,38 +42,66 @@ class Demonio{
     }
 }
 
-var jesucristo: Angel = new Angel("aaa", 5, 5);
+class Bala {
+    x: number;
+    y: number;
+    speed: number = 5;
+
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+
+    move() {
+        this.y -= this.speed; 
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = "yellow";
+        ctx.fillRect(this.x, this.y, 2, 5); 
+    }
+}
+
+var jesus: Angel = new Angel("juego/jesus.png", 5, 5);
 
 const canvas: HTMLCanvasElement | null = document.getElementById("juegodoo") as HTMLCanvasElement;
+
+const anchuraCanvas = canvas.width;
+const alturaCanvas = canvas.height;
+
 
 if(canvas){
     const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d") as CanvasRenderingContext2D;
 
     if(ctx){
+        const canvasRect = canvas.getBoundingClientRect(); // Get canvas position relative to the viewport
 
-        
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 5;
+       
 
-
-        let direccion: number = 1;
-        let y: number = 50;
-
+        // Event listener for mouse movement
+        canvas.addEventListener('mousemove', (event) => {
+            const mouseX = event.clientX - canvasRect.left;
+            const mouseY = event.clientY - canvasRect.top;
+            
+            //40 es la altura y la anchura d ela imagen de jesus
+            jesus.x = clamp(mouseX, 0, canvas.width - 40); 
+            jesus.y = clamp(mouseY, 0, canvas.height - 40);
+        });
+    
         function dibujar(){
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            ctx.beginPath();
-            ctx.moveTo(50,y);
-            ctx.lineTo(200,y);
-            ctx.stroke();
-            y+=direccion;
-
-            if(y<=3 || y >= 250){
-                direccion *= -1;
-            }
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+            jesus.draw(ctx);
+    
+    
             requestAnimationFrame(dibujar);
         }
+    
         dibujar();
+        
+        
     }else{
         console.log("error con ctx");
     }
@@ -64,5 +110,8 @@ if(canvas){
     console.log("error con canvas");
 }
 
-console.log(jesucristo.velocidad);
+
+function clamp(value: number, min: number, max: number): number {
+    return Math.min(Math.max(value, min), max);
+}
 
