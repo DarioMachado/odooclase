@@ -223,7 +223,7 @@ function acabar(ctx) {
     document.body.appendChild(message);
     var nameInput = document.createElement('input');
     nameInput.type = 'text';
-    nameInput.placeholder = 'Enter your name';
+    nameInput.placeholder = 'Tu nombre';
     nameInput.style.position = 'absolute';
     nameInput.style.top = '50px';
     nameInput.style.left = '10px';
@@ -235,7 +235,35 @@ function acabar(ctx) {
     submitButton.style.left = '10px';
     document.body.appendChild(submitButton);
     submitButton.addEventListener('click', function () {
-        var playerName = nameInput.value;
-        console.log('Player name:', playerName);
+        var name = nameInput.value;
+        var puntos = score;
+        var fechaDeHoy = new Date();
+        var fechaFormateada = fechaDeHoy.toISOString().slice(0, 10);
+        console.log('Fecha de hoy:', fechaFormateada);
+        fetch('http://localhost:8069/exorcismo/insertar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                date: fechaFormateada,
+                score: puntos
+            })
+        })
+            .then(function (response) { return response.json(); })
+            .then(function (data) {
+            console.log(data); // You can handle the response here
+            if (data.success) {
+                alert('Score inserted successfully!');
+            }
+            else {
+                alert('Failed to insert score.');
+            }
+        })
+            .catch(function (error) {
+            console.error('Error:', error);
+            alert('An error occurred while inserting the score.');
+        });
     });
 }
