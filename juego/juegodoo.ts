@@ -28,35 +28,39 @@ class Angel {
     disparar(balas: Bala[]) {
         balas.push(new Bala(this.x+20, this.y));
     }
+
+    muerte(){
+        this.vida-=1;
+    }
 }
 
 class Demonio {
     x: number;
     y: number;
-    speed: number;
+    velocidadX: number;
+    velocidadY: number;
     img: HTMLImageElement; // Image property
     direction: number; // Direction of movement (-1 for left, 1 for right)
 
-    constructor(x: number, y: number, speed: number, imgSrc: string) {
+    constructor(x: number, y: number, velocidadX: number, velocidadY: number, imgSrc: string) {
         this.x = x;
         this.y = y;
-        this.speed = speed;
+        this.velocidadX = velocidadX;
+        this.velocidadY = velocidadY;
         this.img = new Image();
         this.img.src = imgSrc; // Load enemy image
         this.direction = -1; // Start by moving left
     }
 
     update() {
-        // Move downwards by 5 units
-        this.y += 0.1;
+        
+        this.y += this.velocidadY;
 
-        // Change direction when reaching the edge of the canvas
         if (this.x <= 0 || this.x >= canvas.width - 40) {
             this.direction *= -1; // Change direction
         }
 
-        // Move horizontally based on direction and speed
-        this.x += this.speed * this.direction;
+        this.x += this.velocidadX * this.direction;
     }
 
     draw(ctx: CanvasRenderingContext2D) {
@@ -64,14 +68,48 @@ class Demonio {
         const width = 40;
         const height = 40;
         ctx.drawImage(this.img, this.x, this.y, width, height);
+        this.damageJesus(jesus);
     }
+
+    collidesWithBullet(bullet: Bala): boolean {
+        return (
+            this.x < bullet.x + 2 &&
+            this.x + 40 > bullet.x &&
+            this.y < bullet.y + 5 &&
+            this.y + 40 > bullet.y
+        );
+    }
+
+    collidesWithJesus(jesus: Angel): boolean {
+        return (
+            this.x < jesus.x + 40 &&
+            this.x + 40 > jesus.x &&
+            this.y < jesus.y + 40 &&
+            this.y + 40 > jesus.y
+        );
+    }
+
+
+    damageJesus(jesus: Angel) {
+        
+        if (this.collidesWithJesus(jesus)) {
+
+            const indexToRemove = demonios.indexOf(this);
+            if (indexToRemove !== -1) {
+                demonios.splice(indexToRemove, 1);
+            }
+        
+            jesus.muerte();
+        }
+    }
+        
 }
 
 
 class Bala {
     x: number;
     y: number;
-    speed: number = 5;
+    speed: number = 3;
 
     constructor(x: number, y: number) {
         this.x = x;
@@ -131,9 +169,29 @@ if(canvas){
     
             jesus.draw(ctx);
 
-            balas.forEach(bullet => {
+            balas.forEach((bullet, bulletIndex)=> {
                 bullet.move();
                 bullet.draw(ctx);
+
+                const demoniosAMatar: number[] = [];
+
+
+                demonios.forEach((demonio, indice) => {
+                    if (demonio.collidesWithBullet(bullet)) {
+                        demoniosAMatar.push(indice);
+                        balas.splice(bulletIndex, 1);
+                    }
+                });
+
+                demoniosAMatar.forEach(index => {
+                    demonios.splice(index, 1);
+                    score += 10;
+                });
+
+
+                if (bullet.y < 0) {
+                    balas.splice(bulletIndex, 1);
+                }
             });
 
             demonios.forEach(demonio => {
@@ -142,6 +200,9 @@ if(canvas){
             });
             drawHealthCrosses(ctx, jesus.vida);
             drawScore(ctx);
+
+
+           
             
             requestAnimationFrame(dibujar);
         }
@@ -156,7 +217,7 @@ if(canvas){
 }else{
     console.log("error con canvas");
 }
-setInterval(addDemonio, 2000);
+setInterval(addDemonio, 500);
 
 function clamp(value: number, min: number, max: number): number {
     return Math.min(Math.max(value, min), max);
@@ -194,19 +255,21 @@ function drawScore(ctx: CanvasRenderingContext2D) {
 
 function addDemonio(){
     const lista = [
-        {nombre: "El diablo", velocidad: 0.5, ruta: "juego/eldiablo.png"},
-        {nombre: "YHVH", velocidad: 2.5, ruta: "juego/yhvh.png"}
+        {nombre: "El diablo", velocidadX: 0.5, velocidadY: 0.3, ruta: "juego/eldiablo.png"},
+        {nombre: "YHVH", velocidadX: 2, velocidadY: 0.2, ruta: "juego/yhvh.png"},
+        {nombre: "Meteorito", velocidadX: 0.2, velocidadY: 1.3, ruta: "juego/meteorito.png"},
+        {nombre: "ATU", velocidadX:0.5, velocidadY:0.5, ruta: "juego/atu.png"}
         
     ];
 
     const randomIndex = Math.floor(Math.random() * lista.length);
-    const { velocidad, ruta } = lista[randomIndex];
+    const { velocidadX, velocidadY, ruta } = lista[randomIndex];
 
   
-    const x = (Math.random() * anchuraCanvas) - 20;
+    const x = Math.max(0, Math.min(canvas.width - 50, Math.random() * canvas.width));
 
 
 
-    const demon = new Demonio(x, 40, velocidad, ruta);
+    const demon = new Demonio(x, 40, velocidadX, velocidadY, ruta);
     demonios.push(demon);
 }

@@ -26,38 +26,61 @@ var Angel = /** @class */ (function () {
     Angel.prototype.disparar = function (balas) {
         balas.push(new Bala(this.x + 20, this.y));
     };
+    Angel.prototype.muerte = function () {
+        this.vida -= 1;
+    };
     return Angel;
 }());
 var Demonio = /** @class */ (function () {
-    function Demonio(x, y, speed, imgSrc) {
+    function Demonio(x, y, velocidadX, velocidadY, imgSrc) {
         this.x = x;
         this.y = y;
-        this.speed = speed;
+        this.velocidadX = velocidadX;
+        this.velocidadY = velocidadY;
         this.img = new Image();
         this.img.src = imgSrc; // Load enemy image
         this.direction = -1; // Start by moving left
     }
     Demonio.prototype.update = function () {
-        // Move downwards by 5 units
-        this.y += 0.1;
-        // Change direction when reaching the edge of the canvas
+        this.y += this.velocidadY;
         if (this.x <= 0 || this.x >= canvas.width - 40) {
             this.direction *= -1; // Change direction
         }
-        // Move horizontally based on direction and speed
-        this.x += this.speed * this.direction;
+        this.x += this.velocidadX * this.direction;
     };
     Demonio.prototype.draw = function (ctx) {
         this.update();
         var width = 40;
         var height = 40;
         ctx.drawImage(this.img, this.x, this.y, width, height);
+        this.damageJesus(jesus);
+    };
+    Demonio.prototype.collidesWithBullet = function (bullet) {
+        return (this.x < bullet.x + 2 &&
+            this.x + 40 > bullet.x &&
+            this.y < bullet.y + 5 &&
+            this.y + 40 > bullet.y);
+    };
+    Demonio.prototype.collidesWithJesus = function (jesus) {
+        return (this.x < jesus.x + 40 &&
+            this.x + 40 > jesus.x &&
+            this.y < jesus.y + 40 &&
+            this.y + 40 > jesus.y);
+    };
+    Demonio.prototype.damageJesus = function (jesus) {
+        if (this.collidesWithJesus(jesus)) {
+            var indexToRemove = demonios.indexOf(this);
+            if (indexToRemove !== -1) {
+                demonios.splice(indexToRemove, 1);
+            }
+            jesus.muerte();
+        }
     };
     return Demonio;
 }());
 var Bala = /** @class */ (function () {
     function Bala(x, y) {
-        this.speed = 5;
+        this.speed = 3;
         this.x = x;
         this.y = y;
     }
@@ -98,9 +121,23 @@ if (canvas) {
             ctx_1.fillStyle = 'black';
             ctx_1.fillRect(0, 0, canvas.width, canvas.height);
             jesus.draw(ctx_1);
-            balas_1.forEach(function (bullet) {
+            balas_1.forEach(function (bullet, bulletIndex) {
                 bullet.move();
                 bullet.draw(ctx_1);
+                var demoniosAMatar = [];
+                demonios.forEach(function (demonio, indice) {
+                    if (demonio.collidesWithBullet(bullet)) {
+                        demoniosAMatar.push(indice);
+                        balas_1.splice(bulletIndex, 1);
+                    }
+                });
+                demoniosAMatar.forEach(function (index) {
+                    demonios.splice(index, 1);
+                    score += 10;
+                });
+                if (bullet.y < 0) {
+                    balas_1.splice(bulletIndex, 1);
+                }
             });
             demonios.forEach(function (demonio) {
                 demonio.update(); // Update demon position
@@ -119,7 +156,7 @@ if (canvas) {
 else {
     console.log("error con canvas");
 }
-setInterval(addDemonio, 2000);
+setInterval(addDemonio, 500);
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }
@@ -148,12 +185,14 @@ function drawScore(ctx) {
 }
 function addDemonio() {
     var lista = [
-        { nombre: "El diablo", velocidad: 0.5, ruta: "juego/eldiablo.png" },
-        { nombre: "YHVH", velocidad: 2.5, ruta: "juego/yhvh.png" }
+        { nombre: "El diablo", velocidadX: 0.5, velocidadY: 0.3, ruta: "juego/eldiablo.png" },
+        { nombre: "YHVH", velocidadX: 2, velocidadY: 0.2, ruta: "juego/yhvh.png" },
+        { nombre: "Meteorito", velocidadX: 0.2, velocidadY: 1.3, ruta: "juego/meteorito.png" },
+        { nombre: "ATU", velocidadX: 0.5, velocidadY: 0.5, ruta: "juego/atu.png" }
     ];
     var randomIndex = Math.floor(Math.random() * lista.length);
-    var _a = lista[randomIndex], velocidad = _a.velocidad, ruta = _a.ruta;
-    var x = (Math.random() * anchuraCanvas) - 20;
-    var demon = new Demonio(x, 40, velocidad, ruta);
+    var _a = lista[randomIndex], velocidadX = _a.velocidadX, velocidadY = _a.velocidadY, ruta = _a.ruta;
+    var x = Math.max(0, Math.min(canvas.width - 50, Math.random() * canvas.width));
+    var demon = new Demonio(x, 40, velocidadX, velocidadY, ruta);
     demonios.push(demon);
 }
