@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   
+    <canvas id="juegodoo" width="300" height="400"></canvas>
+    <button id="acabarPartida" onclick="alert('Button Clicked!')">Click me</button>
+    <script src="juegodoo.js"></script>
+
+    <script>
+
+        document.getElementById('acabarPartida').addEventListener('click', function() {
+    var name = 'YourName'; // Change to the actual name value
+    var score = 100; // Change to the actual score value
+
+    fetch('/exorcismo/insertar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: name,
+            date: 2024-01-01,
+            score: score
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); // You can handle the response here
+        if (data.success) {
+            alert('Score inserted successfully!');
+        } else {
+            alert('Failed to insert score.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while inserting the score.');
+    });
+    </script>
+</body>
+</html>

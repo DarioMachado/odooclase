@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
         ];
 
         var randomIndex = Math.floor(Math.random() * phrases.length);
-        var randomPhrase = "&emsp;"+phrases[randomIndex];
+        var randomPhrase = "&ensp; "+phrases[randomIndex];
 
         divElement.textContent = randomPhrase;
     }

@@ -9,7 +9,7 @@
                     <field name="name" placeholder="Player's Name"/>
                     <!--<button string="Start Game" type="object" class="btn-primary"/> -->
                 </group>
-                <iframe width="100%" height="300" frameborder="0" src="/opt/odoo14/14.0/odoo/myaddons/odooclase/exorcismo/juego/juegodoo.html"/>
+                <iframe width="100%" height="500" frameborder="0" src="http://localhost:8000/juegodoo.html"/>
             </form>
         </field>
     </record>
