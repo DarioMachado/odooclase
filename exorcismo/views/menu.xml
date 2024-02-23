@@ -8,20 +8,14 @@
         <record id="action_exorcismo" model="ir.actions.act_window">
             <field name="name">Exorcismo Ay caramba</field>
             <field name="res_model">exorcismo.puntuacion</field>
-            <field name="view_mode">list,form,tree</field>
-            <field name="context">{'create': False}</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_game_list"/>
+            <field name="context">{'create': True} </field>
         </record>
-
-
 
 
         <!--<button name="jugar" string="Your Button Label" type="object" class="btn-primary"/>-->
 
-
         <menuitem id="menu_exorcismo_sub" name="Exorcismo Submenu" parent="menu_exorcismo_root" action="action_exorcismo" sequence="5"/>
-
-
-
-
     </data>
 </odoo>

@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+import os
 
 class Exorcismo(models.Model):
     _name = 'exorcismo.puntuacion'
@@ -10,7 +11,6 @@ class Exorcismo(models.Model):
 
 
     def jugar(self):
-        # Add your code here to open a modal view with an iframe
         view_id = self.env.ref('exorcismo.your_modal_view_id').id
         return {
             'name': 'Modal View with Iframe',
@@ -21,6 +21,17 @@ class Exorcismo(models.Model):
             'views': [(view_id, 'form')],
             'type': 'ir.actions.act_window',
             'context': {
-                'default_iframe_url': 'https://htmlpreview.github.io/?https://github.com/DarioMachado/odooclase/blob/main/index.html'  # URL for your iframe
+                'default_iframe_url': 'https://htmlpreview.github.io/?https://github.com/DarioMachado/odooclase/blob/main/index.html'
             }
         }
+
+    @api.model
+    def view_init(self, fields_list):
+        super(Exorcismo, self).view_init(fields_list)
+        view_type = self.env.context.get('view_type')
+        if view_type == 'form':
+             self.jugar()
+        else:
+            pass
+
+

@@ -2,41 +2,34 @@
     <data>
 
 
-<record id="view_game_list" model="ir.ui.view">
-    <field name="name">game.list</field>
-    <field name="model">exorcismo.puntuacion</field>
-    <field name="arch" type="xml">
-
-
-        <header>
-            <!-- Your header content goes here -->
-            <button name="jugar" string="Your Button Label" type="object" class="btn-primary"/>
-            <label string="Header Text"/>
-        </header>
-        <list>
-            <!-- Your list fields go here -->
-            <field name="date"/>
-            <field name="name"/>
-            <field name="score"/>
-        </list>
-
-    </field>
-</record>
-
-
+        <record id="view_game_list" model="ir.ui.view">
+            <field name="name">game.list</field>
+            <field name="model">exorcismo.puntuacion</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <header>
+                        <button name="jugar" string="Your Button Label" type="object" class="btn-primary"/>
+                    </header>
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="score"/>
+                </tree>
+            </field>
+        </record>
 
 
         <record id="your_modal_view_id" model="ir.ui.view">
-    <field name="name">your.modal.view</field>
-    <field name="model">exorcismo.puntuacion</field>
-    <field name="arch" type="xml">
-        <form string="Modal View with Iframe">
-            <group>
-                <iframe src="https://htmlpreview.github.io/?https://github.com/DarioMachado/odooclase/blob/main/index.html" width="100%" height="500"/>
-            </group>
-        </form>
-    </field>
-</record>
+        <field name="name">your.modal.view</field>
+        <field name="model">exorcismo.puntuacion</field>
+        <field name="arch" type="xml">
+            <form string="Exorcismo" create="false" edit="false" modal="true">
+                <group>
+                    <iframe src="https://htmlpreview.github.io/?https://github.com/DarioMachado/odooclase/blob/main/index.html" width="100%" height="550"/>
+                </group>
+            </form>
+        </field>
+        </record>
 
 
     </data>
