@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_iglesia_root" name="Iglesia" sequence="10"/>
+
+        <menuitem id="menu_miembro" name="Miembros" parent="menu_iglesia_root" action="iglesia.miembro_view" sequence="5"/>
+
+
+    </data>
+</odoo>

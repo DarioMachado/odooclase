@@ -16,6 +16,6 @@
 
         <!--<button name="jugar" string="Your Button Label" type="object" class="btn-primary"/>-->
 
-        <menuitem id="menu_exorcismo_sub" name="Exorcismo Submenu" parent="menu_exorcismo_root" action="action_exorcismo" sequence="5"/>
+        <menuitem id="menu_exorcismo_sub" name="Exorcismo" parent="menu_exorcismo_root" action="action_exorcismo" sequence="5"/>
     </data>
 </odoo>

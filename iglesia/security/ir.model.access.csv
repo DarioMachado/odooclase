@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_iglesia_iglesia,iglesia.iglesia,model_iglesia_iglesia,base.group_user,1,1,1,1
+access_iglesia_miembro,Iglesia Miembro,model_iglesia_miembro,base.group_user,1,1,1,1

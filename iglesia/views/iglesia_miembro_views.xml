@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="iglesia_miembro_tree" model="ir.ui.view">
+            <field name="name">miembro.tree</field>
+            <field name="model">iglesia.miembro</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="foto" widget="image" class="oe_avatar" options='{"size": [50, 50]}'/>
+                    <field name="nombre"/>
+                    <field name="apellidos"/>
+                    <field name="email"/>
+                    <field name="fecha_nacimiento"/>
+                    <field name="fecha_bautizo"/>
+                    <field name="telefono"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="iglesia_miembro_form" model="ir.ui.view">
+            <field name="name">miembro.form</field>
+            <field name="model">iglesia.miembro</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                        <field name="foto" widget="image" class="oe_avatar"/>
+                        </group>
+                        <group>
+                            <field name="nombre"/>
+                            <field name="apellidos"/>
+                            <field name="email"/>
+                            <field name="fecha_nacimiento"/>
+                            <field name="fecha_bautizo"/>
+                            <field name="telefono"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="iglesia.miembro_view" model="ir.actions.act_window">
+            <field name="name">Miembros</field>
+            <field name="res_model">iglesia.miembro</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+
+    </data>
+</odoo>

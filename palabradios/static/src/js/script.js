@@ -1,9 +1,3 @@
-var companies = ['ACCIONA', 'ACCIONA ENER', 'ACERINOX', 'ACS', 'AENA', 'AMADEUS IT GROUP', 'ARCELORMITTAL', 'BANCO SABADELL', 'BANKINTER', 'BBVA', 'CAIXABANK', 'CELLNEX TELECOM', 'COLONIAL', 'ENAGAS', 'ENDESA', 'FERROVIAL', 'FLUIDRA', 'GRIFOLS', 'IAG', 'IBERDROLA', 'INDITEX', 'INDRA', 'LOGISTA', 'MAPFRE', 'MELI� HOTELS', 'MERLIN PROP.', 'NATURGY', 'REDEIA', 'REPSOL', 'ROVI', 'SACYR', 'SANTANDER', 'SOLARIA', 'TELEF�NICA', 'UNICAJA BANCO'];
-var prices = ['100,450', '19,440', '10,225', '37,650', '176,100', '58,960', '24,110', '1,231', '5,950', '9,344', '4,196', '33,120', '5,035', '13,210', '16,160', '34,550', '19,730', '11,695', '1,788', '10,465', '41,030', '17,220', '25,200', '1,972', '6,705', '8,790', '22,060', '14,565', '14,715', '70,850', '3,020', '3,869', '11,080', '3,827', '0,972'];
-var variacion = ['-3.65', '-2.65', '-1.68', '0.32', '1.32', '-1.04', '-1.07', '0.49', '1.05', '-0.28', '0.65', '-3.66', '-2.99', '-1.12', '-2.44', '-0.58', '0.05', '-0.81', '-2.03', '-0.66', '-0.02', '7.42', '-0.71', '0.36', '-1.69', '-3.72', '-1.16', '-1.69', '-0.27', '4.96', '-2.08', '1.26', '-3.69', '0.45', '-0.31'];
-
-
-var pointer = -1;
 document.addEventListener("DOMContentLoaded", function() {
     var divElement = document.createElement("div");
     var body = document.body;
@@ -16,28 +10,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
     function cambiarFrase() {
-        pointer = (pointer + 1) % companies.length;
-		
-		var companyName = companies[pointer];
-        var price = prices[pointer];
-        var variation = variacion[pointer];
-        
-        var arrow = '';
-        var color = '';
-        if (variation > 0) {
-            arrow = '&uarr;';
-            color = 'green';
-        } else if (variation <= 0) {
-            arrow = '&darr;';
-            color = 'red';
-        }
-        var variationText = ' <span style="color:' + color + '">' + arrow + " "+ Math.abs(variation) + '%</span>';
+        var phrases = [
+            "(Génesis 17:11) Circuncidaréis, pues, la carne de vuestro prepucio, y será por señal del pacto entre mí y vosotros.",
+            "(Deuteronomio 10:16) Circuncidad, pues, el prepucio de vuestro corazón, y no endurezcáis más vuestra cerviz.",
+            "(Deuteronomio 23:17) No haya ramera de entre las hijas de Israel, ni haya sodomita de entre los hijos de Israel.",
+            "(Salmo 137:9) ¡Dichoso el que agarre a tus pequeños y los estrelle contra las rocas!",
+            "(2 Reyes 2:24) Y mirando él atrás, los vio, y los maldijo en el nombre de Jehová. Y salieron dos osos del monte, y despedazaron de ellos a cuarenta y dos muchachos.",
+            "(Mateo 9:12) Al oír esto Jesús, les dijo: Los sanos no tienen necesidad de médico, sino los enfermos.",
+            "(Abraham Mateo 19:98) Sexy señorita",
+            "(Juan 11:25) Le dijo Jesús: Yo soy la resurrección y la vida; el que cree en mí, aunque esté muerto, vivirá."
 
+        ];
 
-        divElement.innerHTML = companyName + ': ' + price + ' (' + variationText + ')';
+        var randomIndex = Math.floor(Math.random() * phrases.length);
+        var randomPhrase = "\t\t"+phrases[randomIndex];
+
+        divElement.textContent = randomPhrase;
     }
 
     cambiarFrase();
 
-    setInterval(cambiarFrase, 5000);
+    setInterval(cambiarFrase, 10000);
 });

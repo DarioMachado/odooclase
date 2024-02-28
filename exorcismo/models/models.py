@@ -5,15 +5,15 @@ class Exorcismo(models.Model):
     _name = 'exorcismo.puntuacion'
     _description = 'La puntuación del exorcismo'
 
-    name = fields.Char(string='Name')
-    date = fields.Date(string='Date')
-    score = fields.Integer(string='Score')
+    name = fields.Char(string='Nombre')
+    date = fields.Date(string='Fecha')
+    score = fields.Integer(string='Puntuación')
 
 
     def jugar(self):
         view_id = self.env.ref('exorcismo.your_modal_view_id').id
         return {
-            'name': 'Modal View with Iframe',
+            'name': 'El jueguito',
             'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'ir.actions.act_window',
