@@ -3,7 +3,7 @@
     <data>
         <template id="assets_backend" name="Custom JavaScript" inherit_id="web.assets_backend">
             <xpath expr="." position="inside">
-                <script type="text/javascript" src="/palabradios/static/src/js/palabras.js"></script>
+                <script type="text/javascript" src="/palabradios/static/src/js/script.js"></script>
             </xpath>
         </template>
     </data>
