@@ -9,18 +9,18 @@ class Angel {
     constructor(imgSrc: string, x: number, y: number){
         this.img = new Image();
         this.img.src = imgSrc;
-        this.img.onload = () => { // Set up onload event handler
-            this.imagenCargada = true; // Set isImageLoaded to true when the image is loaded
+        this.img.onload = () => { 
+            this.imagenCargada = true; 
         };
         this.x = x;
         this.y = y;
     }
 
     draw(ctx: CanvasRenderingContext2D) {
-        if (this.imagenCargada) { // Check if the image has finished loading
+        if (this.imagenCargada) { 
             ctx.drawImage(this.img, this.x, this.y);
         } else {
-            requestAnimationFrame(() => { // Try again in the next frame
+            requestAnimationFrame(() => {
                 this.draw(ctx);
             });}
     }
@@ -41,8 +41,8 @@ class Demonio {
     y: number;
     velocidadX: number;
     velocidadY: number;
-    img: HTMLImageElement; // Image property
-    direction: number; // Direction of movement (-1 for left, 1 for right)
+    img: HTMLImageElement; 
+    direction: number;
 
     constructor(x: number, y: number, velocidadX: number, velocidadY: number, imgSrc: string) {
         this.x = x;
@@ -50,8 +50,8 @@ class Demonio {
         this.velocidadX = velocidadX;
         this.velocidadY = velocidadY;
         this.img = new Image();
-        this.img.src = imgSrc; // Load enemy image
-        this.direction = -1; // Start by moving left
+        this.img.src = imgSrc; 
+        this.direction = -1; 
     }
 
     update() {
@@ -59,7 +59,7 @@ class Demonio {
         this.y += this.velocidadY;
 
         if (this.x <= 0 || this.x >= canvas.width - 40) {
-            this.direction *= -1; // Change direction
+            this.direction *= -1; //Esto cambia la dirección
         }
 
         this.x += this.velocidadX * this.direction;
@@ -147,14 +147,10 @@ if(canvas){
     if(ctx){
         const canvasRect = canvas.getBoundingClientRect(); // Get canvas position relative to the viewport
 
-       
-
-        // Event listener for mouse movement
         canvas.addEventListener('mousemove', (event) => {
             const mouseX = event.clientX - canvasRect.left;
             const mouseY = event.clientY - canvasRect.top;
-            
-            //40 es la altura y la anchura d ela imagen de jesus
+
             jesus.x = clamp(mouseX, 0, canvas.width - 40); 
             jesus.y = clamp(mouseY, 0, canvas.height - 40);
         });
@@ -197,8 +193,8 @@ if(canvas){
             });
 
             demonios.forEach(demonio => {
-                demonio.update(); // Update demon position
-                demonio.draw(ctx); // Draw demon
+                demonio.update(); 
+                demonio.draw(ctx); 
             });
             drawHealthCrosses(ctx, jesus.vida);
             drawScore(ctx);
@@ -239,12 +235,12 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 function drawHealthCrosses(ctx: CanvasRenderingContext2D, health: number) {
-    const margin = 10; // Margin from the top-left corner
-    const crossSize = 20; // Size of each cross image
-    const spacing = 5; // Spacing between crosses
+    const margin = 10; 
+    const crossSize = 20; 
+    const spacing = 5; 
 
     for (let i = 0; i < health; i++) {
-        const crossX = margin + (crossSize + spacing) * i; // Adjusted position for left side
+        const crossX = margin + (crossSize + spacing) * i; 
         const crossY = margin;
 
         ctx.drawImage(cruz, crossX, crossY, crossSize, crossSize);
@@ -254,17 +250,17 @@ function drawHealthCrosses(ctx: CanvasRenderingContext2D, health: number) {
 var score: number = 0;
 
 function drawScore(ctx: CanvasRenderingContext2D) {
-    const margin = 10; // Margin from the top-right corner
-    const fontSize = 15; // Font size for the score
-    const fontFamily = "Pixelade"; // Font family for the score
+    const margin = 10; 
+    const fontSize = 15; 
+    const fontFamily = "Pixelade"; 
 
-    // Calculate the X position based on the canvas width and margin
+    
     const scoreX = canvas.width - margin;
     const scoreY = margin + fontSize;
 
     ctx.font = `${fontSize}px ${fontFamily}`;
     ctx.fillStyle = "white";
-    ctx.textAlign = "right"; // Align text to the right
+    ctx.textAlign = "right"; 
     ctx.fillText(`Puntos: ${score}`, scoreX, scoreY);
 }
 
@@ -298,37 +294,43 @@ function acabar(ctx: CanvasRenderingContext2D){
     clearInterval(intervalo);
     ctx = null;
 
+	const contenedor = document.getElementById('contenedor');
+	
+	contenedor.style.position = 'fixed';
+	contenedor.style.top = '50px';
+	contenedor.style.left = '0';
+	contenedor.style.width = '100%';
+	contenedor.style.display = 'flex';
+	contenedor.style.flexDirection = 'column';
+	contenedor.style.alignItems = 'center';
+	
+	contenedor.removeChild(canvas);
 
+	
     const message = document.createElement('div');
     message.textContent = 'JESÚS VOLVERÁ. INSERTA TU NOMBRE';
-    message.style.position = 'absolute';
-    message.style.top = '10px';
-    message.style.left = '10px';
-    document.body.appendChild(message);
+	message.style.marginBottom = '10px';
+    contenedor.appendChild(message);
 
     const nameInput = document.createElement('input');
     nameInput.type = 'text';
     nameInput.placeholder = 'Tu nombre';
-    nameInput.style.position = 'absolute';
-    nameInput.style.top = '50px';
-    nameInput.style.left = '10px';
-    document.body.appendChild(nameInput); 
+	nameInput.style.marginBottom = '10px';
+    contenedor.appendChild(nameInput); 
     
   
     const submitButton = document.createElement('button');
-    submitButton.textContent = 'Submit';
-    submitButton.style.position = 'absolute';
-    submitButton.style.top = '100px';
-    submitButton.style.left = '10px';
-    document.body.appendChild(submitButton); 
+    submitButton.textContent = 'Enviar';
+    contenedor.appendChild(submitButton); 
     
    
     submitButton.addEventListener('click', function() {
         var name = nameInput.value; 
         var puntos = score; 
         const fechaDeHoy = new Date();
-
-        
+		contenedor.removeChild(nameInput);
+        contenedor.removeChild(submitButton);
+		
         const fechaFormateada = fechaDeHoy.toISOString().slice(0, 10);
 
         console.log('Fecha de hoy:', fechaFormateada);
@@ -346,16 +348,16 @@ function acabar(ctx: CanvasRenderingContext2D){
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data); // You can handle the response here
+            console.log(data);
             if (data.success) {
-                alert('Score inserted successfully!');
+				message.textContent= "Datos insertados correctamente."
             } else {
-                alert('Failed to insert score.');
+                message.textContent= "Fallo al insertar los datos."
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('An error occurred while inserting the score.');
+            message.textContent= "Fallo al insertar los datos."
         });
         });
 
