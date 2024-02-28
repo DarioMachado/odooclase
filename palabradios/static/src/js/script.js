@@ -25,16 +25,16 @@ document.addEventListener("DOMContentLoaded", function() {
         var arrow = '';
         var color = '';
         if (variation > 0) {
-            arrow = '?';
+            arrow = '&uarr;';
             color = 'green';
-        } else if (variation =< 0) {
-            arrow = '?';
+        } else if (variation <= 0) {
+            arrow = '&darr;';
             color = 'red';
         }
-        var variationText = arrow + ' <span style="color:' + color + '">' + Math.abs(variation) + '%</span>';
+        var variationText = ' <span style="color:' + color + '">' + arrow + " "+ Math.abs(variation) + '%</span>';
 
 
-        divElement.textContent = companyName + ': ' + price + ' (' + variationText + ')';
+        divElement.innerHTML = companyName + ': ' + price + ' (' + variationText + ')';
     }
 
     cambiarFrase();

@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (variation > 0) {
             arrow = '?';
             color = 'green';
-        } else if (variation =< 0) {
+        } else if (variation <= 0) {
             arrow = '?';
             color = 'red';
         }
