@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function() {
     divElement.style.backgroundColor = "black";
     divElement.style.color = "white";
     divElement.style.fontSize = "14px";
+    divElement.style.paddingLeft = "50px";
+
 
     function cambiarFrase() {
         var phrases = [
@@ -21,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
         ];
 
         var randomIndex = Math.floor(Math.random() * phrases.length);
-        var randomPhrase = "&ensp; "+phrases[randomIndex];
+        var randomPhrase = "\t\t"+phrases[randomIndex];
 
         divElement.textContent = randomPhrase;
     }
