@@ -4,8 +4,8 @@ from odoo import models, fields, api
 class IglesiaMiembro(models.Model):
     _name = 'iglesia.miembro'
 
-    nombre = fields.Char(string="Nombre")
-    apellidos = fields.Char(string="Apellidos")
+    nombre = fields.Char(string="Nombre", required=True)
+    apellidos = fields.Char(string="Apellidos", required=True)
     email = fields.Char(string="Email")
     fecha_nacimiento = fields.Date(string="Fecha de nacimiento")
     fecha_bautizo = fields.Date(string="Fecha de bautizo")

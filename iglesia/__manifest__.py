@@ -24,6 +24,8 @@
     'data': [
         'security/ir.model.access.csv',
         'views/iglesia_miembro_views.xml',
+        'views/iglesia_donacion_views.xml',
+        'views/iglesia_evento_views.xml',
         'views/menu.xml',
     ],
 

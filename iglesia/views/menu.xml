@@ -5,6 +5,9 @@
 
         <menuitem id="menu_miembro" name="Miembros" parent="menu_iglesia_root" action="iglesia.miembro_view" sequence="5"/>
 
+        <menuitem id="menu_donacion" name="Donaciones" parent="menu_iglesia_root" action="iglesia.donacion_view" sequence="5"/>
+
+        <menuitem id="menu_evento" name="Eventos" parent="menu_iglesia_root" action="iglesia.evento_view" sequence="5"/>
 
     </data>
 </odoo>

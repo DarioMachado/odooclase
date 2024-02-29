@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="iglesia_evento_tree" model="ir.ui.view">
+            <field name="name">evento.tree</field>
+            <field name="model">iglesia.evento</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="nombre"/>
+                    <field name="descripcion"/>
+                    <field name="fecha_evento"/>
+                    <field name="ubicacion"/>
+                    <field name="organizador"/>
+                    <field name="asistentes"/>
+                    <field name="notas"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="iglesia_evento_form" model="ir.ui.view">
+            <field name="name">evento.form</field>
+            <field name="model">iglesia.evento</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                        <field name="nombre"/>
+                        <field name="descripcion"/>
+                        <field name="fecha_evento"/>
+                        </group>
+                        <group>
+                        <field name="ubicacion"/>
+                        <field name="organizador"/>
+                        <field name="asistentes"/>
+                        </group>
+                        <group>
+                        <field name="notas"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="iglesia.evento_view" model="ir.actions.act_window">
+            <field name="name">Evento</field>
+            <field name="res_model">iglesia.evento</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+
+    </data>
+</odoo>

@@ -352,12 +352,12 @@ function acabar(ctx: CanvasRenderingContext2D){
             if (data.success) {
 				message.textContent= "Datos insertados correctamente."
             } else {
-                message.textContent= "Fallo al insertar los datos."
+                message.textContent= " "
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            message.textContent= "Fallo al insertar los datos."
+            message.textContent= " "
         });
         });
 
